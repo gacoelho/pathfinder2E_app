@@ -24,7 +24,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "output": "static"
+      "output": "static",
+      "bundler": "metro"
     },
     "experiments": {
       "typedRoutes": true

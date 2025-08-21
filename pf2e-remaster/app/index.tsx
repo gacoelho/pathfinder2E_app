@@ -5,12 +5,12 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>PF2e Remaster - Ficha</Text>
-      <Link href="/character" asChild>
+      <Link href="character" asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Criar / Editar Ficha</Text>
         </Pressable>
       </Link>
-      <Link href="/about" asChild>
+      <Link href="about" asChild>
         <Pressable style={[styles.button, styles.secondary]}>
           <Text style={styles.buttonText}>Sobre e Referências</Text>
         </Pressable>
