@@ -33,5 +33,18 @@ npm run android  # abre no Android (se emulador/dispositivo conectado)
 - Pathbuilder 2e: `https://pathbuilder2e.com/app.html?v=98a`
 - Archives of Nethys (AoN PRD): `https://2e.aonprd.com/`
 
+## Deploy no GitHub Pages
+1) Configure o repositório remoto (substitua pelo seu usuário):
+```bash
+git init
+git remote add origin https://github.com/<seu-usuario>/pf2e-remaster.git
+```
+2) Ajuste `homepage` no `package.json` para `https://<seu-usuario>.github.io/pf2e-remaster`.
+3) Exporte e publique:
+```bash
+npm run deploy
+```
+Isso gera `dist/` e publica na branch `gh-pages`.
+
 ## Licenças e Conteúdo
 Este projeto é não-oficial, sem afiliação à Paizo. Para texto completo e termos, consulte o AoN PRD. Nenhum conteúdo fechado é incluído; apenas metadados mínimos e chaves de estrutura.
