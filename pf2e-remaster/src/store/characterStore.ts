@@ -23,13 +23,16 @@ export interface CharacterState {
   currentHp: number;
   heroPoints: number;
   speed: number;
+  features: string[];
   setBasics: (basics: Partial<CharacterBasics>) => void;
   setAbility: (key: AbilityKey, value: number) => void;
   setVitals: (v: Partial<Pick<CharacterState, 'maxHp' | 'currentHp' | 'heroPoints' | 'speed'>>) => void;
+  addFeature: (feat: string) => void;
+  removeFeature: (index: number) => void;
   reset: () => void;
 }
 
-const defaultState: Omit<CharacterState, 'setBasics' | 'setAbility' | 'setVitals' | 'reset'> = {
+const defaultState: Omit<CharacterState, 'setBasics' | 'setAbility' | 'setVitals' | 'reset' | 'addFeature' | 'removeFeature'> = {
   basics: {
     name: '',
     ancestry: '',
@@ -44,6 +47,7 @@ const defaultState: Omit<CharacterState, 'setBasics' | 'setAbility' | 'setVitals
   currentHp: 0,
   heroPoints: 1,
   speed: 25,
+  features: [],
 };
 
 export const useCharacterStore = create<CharacterState>()(
@@ -53,6 +57,8 @@ export const useCharacterStore = create<CharacterState>()(
       setBasics: (basics) => set((s) => ({ basics: { ...s.basics, ...basics } })),
       setAbility: (key, value) => set((s) => ({ abilities: { ...s.abilities, [key]: value } })),
       setVitals: (v) => set((s) => ({ ...s, ...v })),
+      addFeature: (feat) => set((s) => ({ features: [...s.features, feat] })),
+      removeFeature: (index) => set((s) => ({ features: s.features.filter((_, i) => i !== index) })),
       reset: () => set(() => ({ ...defaultState })),
     }),
     {
