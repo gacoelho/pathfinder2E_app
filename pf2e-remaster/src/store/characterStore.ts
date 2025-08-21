@@ -29,10 +29,11 @@ export interface CharacterState {
   setVitals: (v: Partial<Pick<CharacterState, 'maxHp' | 'currentHp' | 'heroPoints' | 'speed'>>) => void;
   addFeature: (feat: string) => void;
   removeFeature: (index: number) => void;
+  selectClass: (clsKey: string, initialFeatures: string[]) => void;
   reset: () => void;
 }
 
-const defaultState: Omit<CharacterState, 'setBasics' | 'setAbility' | 'setVitals' | 'reset' | 'addFeature' | 'removeFeature'> = {
+const defaultState: Omit<CharacterState, 'setBasics' | 'setAbility' | 'setVitals' | 'reset' | 'addFeature' | 'removeFeature' | 'selectClass'> = {
   basics: {
     name: '',
     ancestry: '',
@@ -59,6 +60,11 @@ export const useCharacterStore = create<CharacterState>()(
       setVitals: (v) => set((s) => ({ ...s, ...v })),
       addFeature: (feat) => set((s) => ({ features: [...s.features, feat] })),
       removeFeature: (index) => set((s) => ({ features: s.features.filter((_, i) => i !== index) })),
+      selectClass: (clsKey, initialFeatures) => set((s) => ({
+        basics: { ...s.basics, class: clsKey },
+        // substitui apenas os recursos de classe gerados
+        features: Array.from(new Set([ ...initialFeatures, ...s.features ])),
+      })),
       reset: () => set(() => ({ ...defaultState })),
     }),
     {

@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useCharacterStore, AbilityKey } from '../src/store/characterStore';
 import { Picker } from '@react-native-picker/picker';
-import { ancestries, classes } from '../src/data/pf2e';
+import { ancestries, classes, CLASS_FEATURES } from '../src/data/pf2e';
 import React, { useCallback, useState } from 'react';
 
 function LabeledInput({ label, value, onChangeText, keyboardType = 'default' }: {
@@ -37,12 +37,14 @@ function FeatureAdder({ onAdd }: { onAdd: (text: string) => void }) {
 }
 
 export default function CharacterScreen() {
-  const { basics, abilities, maxHp, currentHp, heroPoints, speed, features, setBasics, setAbility, setVitals, addFeature, removeFeature } = useCharacterStore();
+  const { basics, abilities, maxHp, currentHp, heroPoints, speed, features, setBasics, setAbility, setVitals, addFeature, removeFeature, selectClass } = useCharacterStore();
 
   const onChangeAbility = useCallback((key: AbilityKey, txt: string) => {
     const num = Number.parseInt(txt || '0', 10);
     if (!Number.isNaN(num)) setAbility(key, num);
   }, [setAbility]);
+
+  const classFeatures = basics.class ? (CLASS_FEATURES[basics.class] ?? []) : [];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,7 +65,15 @@ export default function CharacterScreen() {
 
       <Text style={styles.label}>Classe</Text>
       <View style={styles.pickerBox}>
-        <Picker selectedValue={basics.class} onValueChange={(v) => setBasics({ class: String(v) })}>
+        <Picker
+          selectedValue={basics.class}
+          onValueChange={(v) => {
+            const key = String(v);
+            setBasics({ class: key });
+            const initial = CLASS_FEATURES[key] ?? [];
+            selectClass(key, initial);
+          }}
+        >
           <Picker.Item label="Selecione..." value="" />
           {classes.map((c) => (
             <Picker.Item key={c.key} label={c.label} value={c.key} />
@@ -79,13 +89,22 @@ export default function CharacterScreen() {
         <LabeledInput key={key} label={label} value={String(abilities[key])} onChangeText={(t) => onChangeAbility(key, t)} keyboardType="numeric" />
       ))}
 
+      <Text style={styles.section}>Habilidades de Classe</Text>
+      {classFeatures.length === 0 ? (
+        <Text style={styles.label}>Selecione uma classe para ver habilidades iniciais.</Text>
+      ) : (
+        classFeatures.map((f, i) => (
+          <Text key={`${f}-${i}`}>• {f}</Text>
+        ))
+      )}
+
       <Text style={styles.section}>Vitais</Text>
       <LabeledInput label="PV Máx" value={String(maxHp)} onChangeText={(t) => setVitals({ maxHp: Number(t) || 0 })} keyboardType="numeric" />
       <LabeledInput label="PV Atuais" value={String(currentHp)} onChangeText={(t) => setVitals({ currentHp: Number(t) || 0 })} keyboardType="numeric" />
       <LabeledInput label="Pontos Heróicos" value={String(heroPoints)} onChangeText={(t) => setVitals({ heroPoints: Number(t) || 0 })} keyboardType="numeric" />
       <LabeledInput label="Deslocamento" value={String(speed)} onChangeText={(t) => setVitals({ speed: Number(t) || 0 })} keyboardType="numeric" />
 
-      <Text style={styles.section}>Habilidades/Talentos</Text>
+      <Text style={styles.section}>Habilidades/Talentos (custom)</Text>
       <FeatureAdder onAdd={(txt) => { if (txt.trim()) addFeature(txt.trim()); }} />
       {features.map((feat, idx) => (
         <View key={`${feat}-${idx}`} style={styles.featureRow}>
