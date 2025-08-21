@@ -2,7 +2,7 @@
   "name": "pf2e-remaster",
   "version": "1.0.0",
   "main": "expo-router/entry",
-  "homepage": "https://<seu-usuario>.github.io/pf2e-remaster",
+  "homepage": "https://gacoelho.github.io/pathfinder2E_app",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
