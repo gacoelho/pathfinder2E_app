@@ -24,7 +24,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "output": "static"
+      "output": "static",
+      "bundler": "metro",
+      "name": "PF2e Remaster - Criador de Fichas",
+      "shortName": "PF2e Fichas",
+      "description": "Criador de fichas de personagem para Pathfinder 2e Remaster",
+      "startUrl": "/",
+      "display": "standalone",
+      "orientation": "portrait",
+      "themeColor": "#7c3aed",
+      "backgroundColor": "#f8fafc"
     },
     "experiments": {
       "typedRoutes": true
